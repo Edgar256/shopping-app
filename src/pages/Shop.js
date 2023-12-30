@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 // import { Link } from "react-router-dom";
-import { Modal, Button, Form } from "react-bootstrap";
+import { firestore } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import { useUserAuth } from "../context/UserAuthContext";
 import rawProducts from "../data/products.json";
-
-
 
 // Images
 import Arrow from "../images/arrow.svg";
@@ -29,6 +29,8 @@ export default function Shop() {
   const [billingPhoneNumber, setBillingPhoneNumber] = useState("");
   const [billingAddress, setBillingAddress] = useState("");
   const [orderError, setOrderError] = useState("");
+  const [orderSuccessMsg, setOrderSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(true);
   const { user } = useUserAuth();
 
   const handleClose = () => setShow(false);
@@ -40,7 +42,7 @@ export default function Shop() {
       products.push({ ...product, amount: 0 });
     });
     return products;
-  }, []); 
+  }, []);
 
   rawProducts.map((product) => {
     return products.push({ ...product, amount: 0 });
@@ -49,6 +51,7 @@ export default function Shop() {
   useEffect(() => {
     setProductsList(products);
     setResultsCounter(products.length);
+    setLoading(false);
   }, [products, setProductsList, setResultsCounter]);
 
   const handleAddToCart = (clickedProduct) => {
@@ -169,21 +172,43 @@ export default function Shop() {
 
   const handleSubmitOrder = async () => {
     try {
-      console.log({ cartItems });
       if (!billingName) return setOrderError("Please add a billing Name");
       if (!billingPhoneNumber)
         return setOrderError("Please add a billing Phone Number");
       if (!billingAddress) return setOrderError("Please add a billing Address");
       setOrderError("");
-      const payload = {
+      setLoading(true);
+
+      const orderData = {
         billingName,
+        status: "PENDING",
         billingPhoneNumber,
         billingAddress,
         cartItems,
         totalPriceCounter,
         userId: user.uid,
+        createdAt: new Date(), // You can add a timestamp for when the order was created
       };
-      console.log({ payload });
+
+      const orderRef = await addDoc(collection(firestore, "orders"), {
+        order: orderData,
+      });
+      console.log();
+      setOrderSuccessMsg(`Document written with ID:  ${orderRef.id}`);
+
+      // Optionally, you can reset the form or navigate to a confirmation page
+      setBillingName("");
+      setBillingPhoneNumber("");
+      setBillingAddress("");
+      setCartItems([]);
+      setTotalPriceCounter(0);
+      setCartCounter(0);
+
+      setTimeout(() => {
+        setLoading(true);
+        setShow(false);
+      }, 1500);
+
     } catch (error) {
       console.log(error);
     }
@@ -305,18 +330,30 @@ export default function Shop() {
               {orderError}
             </div>
           )}
-          <div className="d-flex justify-content-between pt-5">
-            <Button variant="light" onClick={handleClose}>
-              Close
-            </Button>
-            <Button
-              variant="dark"
-              className="rounded"
-              onClick={handleSubmitOrder}
-            >
-              Place Order
-            </Button>
-          </div>
+          {orderSuccessMsg && (
+            <div className="alert alert-success w-100 text-center">
+              {orderSuccessMsg}
+            </div>
+          )}
+          {loading ? (
+            <div className="d-flex">
+              {" "}
+              <Spinner className="mx-auto text-warning" />{" "}
+            </div>
+          ) : (
+            <div className="d-flex justify-content-between pt-5">
+              <Button variant="light" onClick={handleClose}>
+                Close
+              </Button>
+              <Button
+                variant="dark"
+                className="rounded"
+                onClick={handleSubmitOrder}
+              >
+                Place Order
+              </Button>
+            </div>
+          )}
         </Modal.Body>
       </Modal>
     </div>
