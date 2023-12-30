@@ -41,7 +41,7 @@ export default function Shop() {
   useEffect(() => {
     setProductsList(products);
     setResultsCounter(products.length);
-  }, []);
+  }, [products]);
 
   const handleAddToCart = (clickedProduct) => {
     let prev = [...cartItems];
