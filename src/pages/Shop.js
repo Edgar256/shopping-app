@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 // import { Link } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useUserAuth } from "../context/UserAuthContext";
@@ -33,7 +33,15 @@ export default function Shop() {
 
   const handleClose = () => setShow(false);
 
-  let products = [];
+  // let products = [];
+  const products = useMemo(() => {
+    let products = [];
+    rawProducts.forEach((product) => {
+      products.push({ ...product, amount: 0 });
+    });
+    return products;
+  }, []); 
+
   rawProducts.map((product) => {
     return products.push({ ...product, amount: 0 });
   });
@@ -41,7 +49,7 @@ export default function Shop() {
   useEffect(() => {
     setProductsList(products);
     setResultsCounter(products.length);
-  }, [products, setProductsList]);
+  }, [products, setProductsList, setResultsCounter]);
 
   const handleAddToCart = (clickedProduct) => {
     let prev = [...cartItems];
