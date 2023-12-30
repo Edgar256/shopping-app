@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useUserAuth } from "../context/UserAuthContext";
 import rawProducts from "../data/products.json";
@@ -41,7 +41,7 @@ export default function Shop() {
   useEffect(() => {
     setProductsList(products);
     setResultsCounter(products.length);
-  }, [products]);
+  }, [products, setProductsList]);
 
   const handleAddToCart = (clickedProduct) => {
     let prev = [...cartItems];
