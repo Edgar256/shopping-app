@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Alert } from "react-bootstrap";
+import { Form, Alert, Spinner } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useUserAuth } from "../context/UserAuthContext";
 
@@ -8,24 +8,29 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { signUp } = useUserAuth();
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
       await signUp(email, password);
+      setLoading(false);
       navigate("/");
     } catch (err) {
+      setLoading(false);
       setError(err.message);
     }
   };
 
   return (
     <>
-      <div className="p-4 box">
-        <h2 className="mb-3">Firebase Auth Signup</h2>
+      <div className="p-4 box my-5 custom-card">
+        <h2 className="my-3 text-center">Logo</h2>
+        <h2 className="my-3 text-center text-muted">SignUp</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -44,15 +49,22 @@ const Signup = () => {
             />
           </Form.Group>
 
-          <div className="d-grid gap-2">
-            <Button variant="primary" type="Submit">
-              Sign up
-            </Button>
-          </div>
+          {loading ? (
+            <div className="w-100 d-flex">
+              <Spinner className="mx-auto text-warning" />
+            </div>
+          ) : (
+            <div className="d-grid gap-2">
+              <Button variant="primary" type="Submit">
+                Sign up
+              </Button>
+            </div>
+          )}
+          
         </Form>
       </div>
       <div className="p-4 box mt-3 text-center">
-        Already have an account? <Link to="/">Log In</Link>
+        Already have an account? <Link to="/login">Log In</Link>
       </div>
     </>
   );

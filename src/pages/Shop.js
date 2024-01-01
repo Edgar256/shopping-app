@@ -194,7 +194,7 @@ export default function Shop() {
         order: orderData,
       });
       console.log();
-      setOrderSuccessMsg(`Document written with ID:  ${orderRef.id}`);
+      setOrderSuccessMsg(`Your order has been successfully placed with order ID  # ${orderRef.id}`);
 
       // Optionally, you can reset the form or navigate to a confirmation page
       setBillingName("");
@@ -205,9 +205,10 @@ export default function Shop() {
       setCartCounter(0);
 
       setTimeout(() => {
-        setLoading(true);
+        setLoading(false);
         setShow(false);
-      }, 1500);
+        setOrderSuccessMsg("")
+      }, 2500);
 
     } catch (error) {
       console.log(error);

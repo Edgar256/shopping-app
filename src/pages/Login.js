@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Alert } from "react-bootstrap";
+import { Form, Alert, Spinner } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import GoogleButton from "react-google-button";
 import { useUserAuth } from "../context/UserAuthContext";
@@ -9,16 +9,20 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { logIn, googleSignIn } = useUserAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true)
     try {
       await logIn(email, password);
-      navigate("/home");
+      setLoading(false)
+      navigate("/shop");
     } catch (err) {
+      setLoading(false)
       setError(err.message);
     }
   };
@@ -35,8 +39,8 @@ const Login = () => {
 
   return (
     <>
-      <div className="p-4 box my-4">
-        <h2 className="my-3">Logo</h2>
+      <div className="p-4 box my-5 custom-card">
+        <h2 className="my-3 text-center">Logo</h2>
         <h2 className="my-3 text-center text-muted">Login</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
@@ -56,11 +60,18 @@ const Login = () => {
             />
           </Form.Group>
 
-          <div className="d-grid gap-2">
-            <Button variant="primary" type="Submit">
-              Log In
-            </Button>
-          </div>
+          {loading ? (
+            <div className="w-100 d-flex">
+              <Spinner className="mx-auto text-warning" />
+            </div>
+          ) : (
+            <div className="d-grid gap-2">
+              <Button variant="primary" type="Submit">
+                Log In
+              </Button>
+            </div>
+          )}
+
         </Form>
         <hr />
         <div>
@@ -69,7 +80,7 @@ const Login = () => {
             type="dark"
             onClick={handleGoogleSignIn}
           />
-        </div>        
+        </div>
       </div>
       <div className="p-4 box mt-3 text-center">
         Don't have an account? <Link to="/signup">Sign up</Link>

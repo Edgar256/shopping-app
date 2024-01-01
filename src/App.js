@@ -3,9 +3,10 @@ import "./App.css";
 import Shop from "./pages/Shop";
 import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
-import PhoneSignUp from "./pages/PhoneSignUp";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { UserAuthContextProvider } from "./context/UserAuthContext";
+import PastOrders from "./pages/PastOrders";
+import Landing from "./pages/Landing";
 
 function App() {
   return (
@@ -13,18 +14,27 @@ function App() {
       <div>
         <UserAuthContextProvider>
           <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+
+            {/* Protected Routes - Only Accessible when loggedin */}
             <Route
-              path="/home"
+              path="/shop"
               element={
                 <ProtectedRoute>
-                  {/* <Home /> */}
                   <Shop />
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/phonesignup" element={<PhoneSignUp />} />
+            <Route
+              path="/past-orders"
+              element={
+                <ProtectedRoute>
+                  <PastOrders />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </UserAuthContextProvider>
       </div>

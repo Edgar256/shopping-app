@@ -52,7 +52,7 @@ export default function Header() {
           </Link>
 
           {user && (
-            <Link to="/recipes" className="nav-icon">
+            <Link to="/" className="nav-icon">
               <div className="d-flex w-100 position-relative">
                 <img
                   src={user.photoURL}
