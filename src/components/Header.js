@@ -6,7 +6,7 @@ import { useUserAuth } from "../context/UserAuthContext";
 // Images
 import Logo from "../images/logo.png";
 import Dot from "../images/dot.png";
-import Settings from "../images/settings.svg";
+import Recipes from "../images/recipes.svg";
 import Place from "../images/shop.svg";
 
 export default function Header() {
@@ -20,59 +20,83 @@ export default function Header() {
       console.log(error.message);
     }
   };
-  
+
   return (
-    <div>
+    <div className="p-2">
       <nav className="top-nav">
-        <img src={Logo} alt="" className="nav-img" />
+        <Link to="/"><img src={Logo} alt="" className="nav-img" /></Link>
         <div className="nav-icons-container">
-          {/* <Link to="/recipes" className="nav-icon">
-            <div className="d-flex w-100">
-              <img src={Recipes} alt="" className="nav-icon-img" />
-            </div>
-            <div className="l-h-0">
-              <small>About Us</small>
-            </div>
-          </Link> */}
-          <Link to="/shop" className="nav-icon">
-            <div className="d-flex w-100">
-              <img src={Place} alt="" className="nav-icon-img" />
-            </div>
-            <div className="l-h-0">
-              <small>Shop</small>
-            </div>
-          </Link>
-          <Link to="/settings" className="nav-icon">
-            <div className="d-flex w-100">
-              <img src={Settings} alt="" className="nav-icon-img" />
-            </div>
-            <div className="l-h-0">
-              <small>Settings</small>
-            </div>
-          </Link>
+          {user && (
+            <>
+              <Link to="/shop" className="nav-icon">
+                <div className="d-flex w-100">
+                  <img src={Place} alt="" className="nav-icon-img" />
+                </div>
+                <div className="l-h-0">
+                  <small>Shop</small>
+                </div>
+              </Link>
+              <Link to="/past-orders" className="nav-icon">
+                <div className="d-flex w-100">
+                  <img src={Recipes} alt="" className="nav-icon-img" />
+                </div>
+                <div className="l-h-0">
+                  <small>Orders</small>
+                </div>
+              </Link>
+              <Link to="/" className="nav-icon">
+                <div className="d-flex w-100 position-relative">
+                  <img
+                    src={user.photoURL}
+                    alt={user.email}
+                    className="nav-icon-img rounded"
+                  />
+                  <img
+                    src={Dot}
+                    alt=""
+                    className="dot"
+                    width="10"
+                    height="10"
+                  />
+                </div>
+                <div className="l-h-0 text-center">
+                  <div className="pb-1">
+                    {" "}
+                    <small>Horay</small>
+                  </div>
+                  <div>
+                    {" "}
+                    <small>{user.email}</small>
+                  </div>
+                </div>
+              </Link>
+            </>
+          )}
 
           {user && (
-            <Link to="/" className="nav-icon">
-              <div className="d-flex w-100 position-relative">
-                <img
-                  src={user.photoURL}
-                  alt={user.email}
-                  className="nav-icon-img rounded"
-                />
-                <img src={Dot} alt="" className="dot" width="10" height="10" />
-              </div>
-              <div className="l-h-0">
-                <small>hi {user.email}</small>
-              </div>
+            <button
+              className="btn btn-danger rounded-pill px-3"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          )}
+
+          {!user && (
+            <Link to="/signup">
+              <button className="btn btn-light_ btn-outline-secondary rounded-pill px-3 mx-2">
+                SignUp
+              </button>
             </Link>
           )}
 
-          <button
-            className="btn btn-danger rounded-pill px-3"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+          {!user && (
+            <Link to="/login">
+              <button className="btn btn-success rounded-pill px-3">
+                Login
+              </button>
+            </Link>
+          )}
         </div>
       </nav>
     </div>
