@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-// import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { firestore } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
@@ -32,6 +32,7 @@ export default function Shop() {
   const [orderSuccessMsg, setOrderSuccessMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const { user } = useUserAuth();
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
 
@@ -191,10 +192,19 @@ export default function Shop() {
       };
 
       const orderRef = await addDoc(collection(firestore, "orders"), {
-        order: orderData,
+        billingName,
+        status: "PENDING",
+        billingPhoneNumber,
+        billingAddress,
+        cartItems,
+        totalPriceCounter,
+        userId: user.uid,
+        createdAt: new Date(),
       });
       console.log();
-      setOrderSuccessMsg(`Your order has been successfully placed with order ID  # ${orderRef.id}`);
+      setOrderSuccessMsg(
+        `Your order has been successfully placed with order ID  # ${orderRef.id}`
+      );
 
       // Optionally, you can reset the form or navigate to a confirmation page
       setBillingName("");
@@ -207,9 +217,9 @@ export default function Shop() {
       setTimeout(() => {
         setLoading(false);
         setShow(false);
-        setOrderSuccessMsg("")
-      }, 2500);
-
+        setOrderSuccessMsg("");
+        navigate("/past-orders")
+      }, 5000);
     } catch (error) {
       console.log(error);
     }
