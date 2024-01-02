@@ -116,7 +116,7 @@ export default function Shop() {
     return productsList.map((product, key) => {
       return (
         <ProductCard
-          key={product.productId.value}
+          key={key}
           product={product}
           handleAddToCart={handleAddToCart}
           isInCart={isInCart}
