@@ -2,18 +2,14 @@ import React from "react";
 import { getLastString } from "../pages/Shop";
 
 const ProductCard = ({ product, handleAddToCart, isInCart }) => {
-  const imageUrl = getLastString(product.imageUrl) !== "Not_Available"
-    ? product.imageUrl
-    : "https://via.placeholder.com/150";
+  const imageUrl =
+    getLastString(product.imageUrl) !== "Not_Available"
+      ? product.imageUrl
+      : "https://via.placeholder.com/150";
 
   return (
     <div className="product" key={product.productId.value}>
       <div className="product-img">
-        {/* {getLastString(product.imageUrl) !== "Not_Available" ? (
-          <img src={product.imageUrl} alt="" />
-        ) : (
-          <img src={`https://via.placeholder.com/150`} alt="" />
-        )} */}
         <img src={imageUrl} alt={product.imageUrl} />
       </div>
       <div className="text-center">

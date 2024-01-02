@@ -178,18 +178,7 @@ export default function Shop() {
         return setOrderError("Please add a billing Phone Number");
       if (!billingAddress) return setOrderError("Please add a billing Address");
       setOrderError("");
-      setLoading(true);
-
-      const orderData = {
-        billingName,
-        status: "PENDING",
-        billingPhoneNumber,
-        billingAddress,
-        cartItems,
-        totalPriceCounter,
-        userId: user.uid,
-        createdAt: new Date(), // You can add a timestamp for when the order was created
-      };
+      setLoading(true);      
 
       const orderRef = await addDoc(collection(firestore, "orders"), {
         billingName,
