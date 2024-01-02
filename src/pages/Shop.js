@@ -190,7 +190,6 @@ export default function Shop() {
         userId: user.uid,
         createdAt: new Date(),
       });
-      console.log();
       setOrderSuccessMsg(
         `Your order has been successfully placed with order ID  # ${orderRef.id}`
       );

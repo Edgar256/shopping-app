@@ -21,6 +21,10 @@ export default function Header() {
     }
   };
 
+  const imageUrl =
+  user && user.photoURL? user.photoURL
+    : "https://via.placeholder.com/150";
+
   return (
     <div className="p-2">
       <nav className="top-nav">
@@ -47,7 +51,7 @@ export default function Header() {
               <Link to="/" className="nav-icon">
                 <div className="d-flex w-100 position-relative">
                   <img
-                    src={user.photoURL}
+                    src={imageUrl}
                     alt={user.email}
                     className="nav-icon-img rounded"
                   />
@@ -62,7 +66,7 @@ export default function Header() {
                 <div className="l-h-0 text-center">
                   <div className="pb-1">
                     {" "}
-                    <small>Horay</small>
+                    <small>Horray</small>
                   </div>
                   <div>
                     {" "}
