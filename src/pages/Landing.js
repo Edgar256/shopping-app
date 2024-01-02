@@ -10,7 +10,7 @@ export default function Landing () {
         <div className="w-100">
           <div className="py-5">
             <h1 className="display-1 text-center text-white py-5 mt-5">
-              Welcome to VU Shopping App
+              Welcome to Subula Shopping App
             </h1>
           </div>
           <div className="d-flex w-100">
